@@ -1,0 +1,26 @@
+name: spec-runner
+
+on:
+  # для ручного теста из вкладки Actions
+  workflow_dispatch:
+    inputs:
+      spec_url:
+        description: "Optional: URL спецификации"
+        required: false
+      repo_full_name:
+        description: "Optional: кто вызвал"
+        required: false
+  # для вызова из приватных репо
+  repository_dispatch:
+    types: [run-spec]
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print event info
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          echo "repo_full_name(client_payload)=${{ github.event.client_payload.repo_full_name }}"
+          echo "spec_url(client_payload)=${{ github.event.client_payload.spec_url }}"
+          echo "spec_url(manual input)=${{ inputs.spec_url }}"
